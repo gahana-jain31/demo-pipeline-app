@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Demo Pipeline</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">School demo &amp; sales register</p>
+        <h1>Demo pipeline</h1>
+      </div>
+      <div class="topbar-actions">
+        <input id="yourName" class="input" placeholder="Your name" />
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab active" data-tab="dashboard">Dashboard</button>
+      <button class="tab" data-tab="all">All demos</button>
+      <button class="tab tab-primary" id="addDemoBtn">+ Add demo</button>
+      <span id="statusIndicator" class="status-indicator"></span>
+    </nav>
+
+    <section id="dashboard" class="tab-panel active">
+      <div class="filters">
+        <div>
+          <label>State</label>
+          <select id="dashFilterState">
+            <option value="">All</option>
+          </select>
+        </div>
+        <div>
+          <label>From date</label>
+          <input type="date" id="dashFilterFrom" class="input" />
+        </div>
+        <div>
+          <label>To date</label>
+          <input type="date" id="dashFilterTo" class="input" />
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <button type="button" id="dashFilterClear" class="btn-secondary">Clear filters</button>
+        </div>
+      </div>
+      <div class="cards" id="dashboardCards"></div>
+    </section>
+
+    <section id="all" class="tab-panel">
+      <div class="filters">
+        <div>
+          <label>Status</label>
+          <select id="filterStatus">
+            <option value="">All</option>
+            <option>Scheduled</option>
+            <option>Demo Completed</option>
+            <option>Follow-up</option>
+            <option>Confirmed</option>
+            <option>Rescheduled</option>
+            <option>Lost</option>
+          </select>
+        </div>
+        <div>
+          <label>Lead Quality</label>
+          <select id="filterLead">
+            <option value="">All</option>
+            <option>Hot</option>
+            <option>Warm</option>
+            <option>Cold</option>
+          </select>
+        </div>
+        <div>
+          <label>State</label>
+          <select id="filterState">
+            <option value="">All</option>
+          </select>
+        </div>
+        <div class="search">
+          <input id="searchBox" class="input" placeholder="Search school, contact, city" />
+        </div>
+      </div>
+
+      <table class="demo-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>School</th>
+            <th>Contact</th>
+            <th>Demo by</th>
+            <th>Sales lead</th>
+            <th>Status</th>
+            <th>Lead type</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="demoRows"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <!-- View demo modal (read-only) -->
+  <div id="viewModalBackdrop" class="modal-backdrop">
+    <div class="modal">
+      <h2>Demo details</h2>
+      <div class="view-grid" id="viewGrid"></div>
+      <div class="modal-actions">
+        <button type="button" id="viewCloseBtn" class="btn-secondary">Close</button>
+        <button type="button" id="viewEditBtn" class="btn-primary">Edit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add / Edit demo modal -->
+  <div id="modalBackdrop" class="modal-backdrop">
+    <div class="modal">
+      <h2 id="modalTitle">Add demo</h2>
+      <form id="demoForm">
+        <input type="hidden" id="recordId" />
+        <div class="form-grid">
+          <label>School name<input required id="f_school" /></label>
+          <label>Date<input type="date" id="f_date" /></label>
+          <label>Time<input placeholder="e.g. 11:00 AM" id="f_time" /></label>
+          <label>Mode
+            <select id="f_mode"><option></option><option>Virtual</option><option>Physical</option></select>
+          </label>
+          <label>City<input id="f_city" /></label>
+          <label>State<input id="f_state" /></label>
+          <label class="span-2">Address<input id="f_address" /></label>
+          <label>Board
+            <select id="f_board"><option></option><option>State Board</option><option>CBSE</option><option>ICSE</option><option>IB</option><option>IGCSE</option><option>Other</option></select>
+          </label>
+          <label>Management
+            <select id="f_management"><option></option><option>Trust</option><option>Private</option><option>Government</option><option>Society</option><option>Other</option></select>
+          </label>
+          <label>Student strength<input type="number" id="f_studentStrength" /></label>
+          <label>Staff number<input type="number" id="f_staffNumber" /></label>
+          <label>Contact name<input id="f_contactName" /></label>
+          <label>Contact phone<input id="f_contactPhone" /></label>
+          <label>Contact email<input type="email" id="f_contactEmail" /></label>
+          <label class="span-2">Requirement<input id="f_requirement" /></label>
+          <label>Demo taken by<input id="f_demoBy" /></label>
+          <label>Sales lead<input id="f_salesLead" /></label>
+          <label class="span-2">Meeting link<input id="f_meetingLink" /></label>
+          <label>Lead quality
+            <select id="f_leadQuality"><option></option><option>Hot</option><option>Warm</option><option>Cold</option></select>
+          </label>
+          <label>Status
+            <select id="f_status"><option>Scheduled</option><option>Demo Completed</option><option>Follow-up</option><option>Confirmed</option><option>Rescheduled</option><option>Lost</option></select>
+          </label>
+          <label id="rescheduleDateWrap" class="reschedule-field hidden">Rescheduled date<input type="date" id="f_rescheduledDate" /></label>
+          <label id="rescheduleTimeWrap" class="reschedule-field hidden">Rescheduled time<input placeholder="e.g. 3:00 PM" id="f_rescheduledTime" /></label>
+          <label class="span-2">Remarks<input id="f_remarks" /></label>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="cancelBtn" class="btn-secondary">Cancel</button>
+          <button type="submit" class="btn-primary">Save demo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

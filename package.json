@@ -1,0 +1,16 @@
+{
+  "name": "demo-pipeline-app",
+  "version": "1.0.0",
+  "description": "Internal tool for logging and tracking school demo visits, backed by Airtable.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1"
+  }
+}
